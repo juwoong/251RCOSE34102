@@ -12,6 +12,7 @@ ProcessQueue *create_empty_process_queue(int size) {
     
     queue->processes = (Process *)malloc(sizeof(Process) * size);
     if (queue->processes == NULL) {
+        free(queue->processes);
         free(queue);
         return NULL;
     }
@@ -42,6 +43,14 @@ void enqueue(ProcessQueue *queue, Process process) {
     queue->processes[queue->size++] = process;
 }
 
+ProcessQueue *copy_process_queue(ProcessQueue *queue) {
+    if (queue == NULL) {
+        return NULL;
+    }
+    
+    return create_process_queue(queue->processes, queue->size);
+}
+
 // Remove and return a process from the queue
 Process dequeue(ProcessQueue *queue) {
     Process empty_process = {0, 0, 0, 0, 0};
@@ -67,22 +76,10 @@ int insert_process(ProcessQueue *queue, Process process) {
         return -1;
     }
     
-    // Insert at a position sorted by arrival time
-    int i;
-    for (i = 0; i < queue->size; i++) {
-        if (process.arrival_time < queue->processes[i].arrival_time) {
-            break;
-        }
-    }
-    
-    // Move elements from i to the end one position backward
-    for (int j = queue->size; j > i; j--) {
-        queue->processes[j] = queue->processes[j - 1];
-    }
-    
-    queue->processes[i] = process;
+    // 항상 맨 뒤에 추가
+    queue->processes[queue->size] = process;
     queue->size++;
-    return i;
+    return queue->size - 1;
 }
 
 // Check if the queue is empty
@@ -124,13 +121,8 @@ void print_process_queue(ProcessQueue *queue) {
 
 // Free the memory allocated for the queue
 void free_process_queue(ProcessQueue *queue) {
-    if (queue == NULL) {
-        return;
-    }
-    
-    if (queue->processes != NULL) {
+    if (queue != NULL) {
         free(queue->processes);
+        free(queue);
     }
-    
-    free(queue);
 }

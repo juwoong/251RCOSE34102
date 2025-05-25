@@ -1,4 +1,3 @@
-
 #ifndef PROCESS_QUEUE_H
 #define PROCESS_QUEUE_H
 
@@ -12,6 +11,7 @@ typedef struct ProcessQueue {
 
 ProcessQueue *create_empty_process_queue(int size);
 ProcessQueue *create_process_queue(Process *processes, int size);
+ProcessQueue *copy_process_queue(ProcessQueue *queue);
 
 void enqueue(ProcessQueue *queue, Process process);
 Process dequeue(ProcessQueue *queue);
