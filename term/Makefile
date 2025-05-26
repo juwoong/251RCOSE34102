@@ -15,6 +15,7 @@ SRCS = $(SRC_DIR)/main.c \
 	   $(STRATEGY_DIR)/npp.c \
 	   $(STRATEGY_DIR)/pp.c \
 	   $(STRATEGY_DIR)/rr.c \
+	   $(SRC_DIR)/libs/evaluation.c \
 	   $(SRC_DIR)/gantt.c
 
 OBJS = $(SRCS:.c=.o)

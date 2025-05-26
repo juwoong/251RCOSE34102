@@ -5,7 +5,7 @@
 #include "../process_queue.h"
 #include "../libs/sort.h"
 
-void psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
+GanttChart* psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
     // Copy the original Queue
     ProcessQueue *target = copy_process_queue(queue);
     ProcessQueue *ready_queue = create_empty_process_queue(target->size);
@@ -27,7 +27,6 @@ void psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
     int current_start_time = 0;
     int current_burst_time = 0;
     int current_resume_time = 0;
-    int is_idle = 1;
 
     Process next_process = {0, 0, 0, 0, 0};
     if (target->size > 0) {
@@ -36,8 +35,6 @@ void psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
     Process current = {0, 0, 0, 0, 0};
     GanttChart *gantt_chart = create_gantt_chart(target->size + 20); 
 
-    int turnaround_time = 0;
-    int waiting_time = 0;
     int max_time = 1000;
     int is_changed = 0;
 
@@ -147,8 +144,8 @@ void psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
         }
     }
 
-    print_gantt_chart(gantt_chart);
-    free_gantt_chart(gantt_chart);
     free_process_queue(target);
     free_process_queue(ready_queue);
+
+    return gantt_chart;
 }

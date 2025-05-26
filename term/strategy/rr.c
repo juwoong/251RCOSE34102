@@ -4,7 +4,7 @@
 #include "../gantt.h"
 #include "../process_queue.h"
 
-void rr_scheduling(ProcessQueue *queue, int *io_time, int io_time_length, int time_unit) {
+GanttChart* rr_scheduling(ProcessQueue *queue, int *io_time, int io_time_length, int time_unit) {
     // Copy the original Queue
     ProcessQueue *target = copy_process_queue(queue);
     ProcessQueue *ready_queue = create_empty_process_queue(target->size);
@@ -34,8 +34,6 @@ void rr_scheduling(ProcessQueue *queue, int *io_time, int io_time_length, int ti
     Process current = {0, 0, 0, 0, 0};
     GanttChart *gantt_chart = create_gantt_chart(target->size + 20); 
 
-    int turnaround_time = 0;
-    int waiting_time = 0;
     int max_time = 1000;
 
     for(int i=0; i < max_time; i++) {
@@ -61,26 +59,6 @@ void rr_scheduling(ProcessQueue *queue, int *io_time, int io_time_length, int ti
                 next_process = dequeue(target);
             }
         }
-
-        // if (is_changed) {
-        //     current_burst_time = i - current_start_time;
-
-        //     if (current.pid > 0 && ready_queue->size > 0 && (current.cpu_burst_time - current_burst_time) > ready_queue->processes[0].cpu_burst_time) {
-        //         // handle preemption
-        //         add_gantt_item(gantt_chart, current.pid, current_start_time, i, 0);
-        //         current.cpu_burst_time = current.cpu_burst_time - current_burst_time;
-
-        //         insert_process(ready_queue, current);
-
-        //         current_start_time = i;
-        //         current_burst_time = 0;
-
-        //         current = dequeue(ready_queue);
-        //         sort_by_shortest_job_first(ready_queue);
-        //     } 
-
-        //     is_changed = 0;
-        // }
 
         // case of idle
         if (current.pid == 0) {  // current is idle
@@ -144,9 +122,8 @@ void rr_scheduling(ProcessQueue *queue, int *io_time, int io_time_length, int ti
         }
     }
 
-    printf("Round Robin: \n");
-    print_gantt_chart(gantt_chart);
-    free_gantt_chart(gantt_chart);
     free_process_queue(target);
     free_process_queue(ready_queue);
+
+    return gantt_chart;
 }

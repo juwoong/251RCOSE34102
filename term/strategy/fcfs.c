@@ -6,7 +6,7 @@
 #include "fcfs.h"
 #include "../libs/sort.h"
 
-void fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
+GanttChart* fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
     // Copy the original Queue
     ProcessQueue *target = copy_process_queue(queue);
     ProcessQueue *ready_queue = create_empty_process_queue(target->size);
@@ -35,9 +35,7 @@ void fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
     }
     Process current = {0, 0, 0, 0, 0};
     GanttChart *gantt_chart = create_gantt_chart(target->size + 20); 
-
-    int turnaround_time = 0;
-    int waiting_time = 0;
+    
     int max_time = 1000;
 
     for(int i=0; i < max_time; i++) {
@@ -120,10 +118,9 @@ void fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_length) {
         }
     }
 
-    printf("FCFS: \n");
-    print_gantt_chart(gantt_chart);
-    free_gantt_chart(gantt_chart);
     free_process_queue(target);
     free_process_queue(ready_queue);
     free_process_queue(io_queue);
+
+    return gantt_chart;
 }

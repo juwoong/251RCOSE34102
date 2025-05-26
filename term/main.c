@@ -9,6 +9,7 @@
 #include "strategy/npp.h"
 #include "strategy/pp.h"
 #include "strategy/rr.h"
+#include "libs/evaluation.h"
 
 int main(int argc, char *argv[]) {
     if (argc != 6) {
@@ -77,12 +78,33 @@ int main(int argc, char *argv[]) {
     printf("\n");
     
     // Run scheduling algorithm
-    fcfs_scheduling(queue, io_time, io_count);
-    nsjf_scheduling(queue, io_time, io_count);
-    psjf_scheduling(queue, io_time, io_count);
-    npp_scheduling(queue, io_time, io_count);
-    pp_scheduling(queue, io_time, io_count);
-    rr_scheduling(queue, io_time, io_count, 2);
+    GanttChart *fcfs_chart = fcfs_scheduling(queue, io_time, io_count);
+    GanttChart *nsjf_chart = nsjf_scheduling(queue, io_time, io_count);
+    GanttChart *psjf_chart = psjf_scheduling(queue, io_time, io_count);
+    GanttChart *npp_chart = npp_scheduling(queue, io_time, io_count);
+    GanttChart *pp_chart = pp_scheduling(queue, io_time, io_count);
+    GanttChart *rr_chart = rr_scheduling(queue, io_time, io_count, 2);
+
+    Evaluation fcfs_evaluation = calculate_average_times(queue, fcfs_chart);
+    Evaluation nsjf_evaluation = calculate_average_times(queue, nsjf_chart);
+    Evaluation psjf_evaluation = calculate_average_times(queue, psjf_chart);
+    Evaluation npp_evaluation = calculate_average_times(queue, npp_chart);
+    Evaluation pp_evaluation = calculate_average_times(queue, pp_chart);
+    Evaluation rr_evaluation = calculate_average_times(queue, rr_chart);
+
+    char *algorithm_names[] = {"FCFS", "NP-SJF", "P-SJF", "NP-P", "P-P", "RR"};
+
+    GanttChart *gantt_charts[] = {fcfs_chart, nsjf_chart, psjf_chart, npp_chart, pp_chart, rr_chart};
+    Evaluation evaluations[] = {fcfs_evaluation, nsjf_evaluation, psjf_evaluation, npp_evaluation, pp_evaluation, rr_evaluation};
+    
+    // print gantt chart 
+    for(int i=0; i<6; i++) {
+        printf("%s: \n", algorithm_names[i]);
+        print_gantt_chart(gantt_charts[i]);
+        printf("\n\n==============================================\n\n");
+    }
+
+    calculate_evaluation_table(evaluations, algorithm_names, 6);
     
     // Free memory.
     free(io_time);
