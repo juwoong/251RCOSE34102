@@ -12,15 +12,7 @@ GanttChart* nsjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
     ProcessQueue *io_queue = create_empty_process_queue(target->size);
 
     // Sort by first arrived
-    for (int i=0; i < target->size - 1; i++) {
-        for (int j=i + 1; j < target->size; j++) {
-            if (target->processes[i].arrival_time > target->processes[j].arrival_time) {
-                Process temp = target->processes[i];
-                target->processes[i] = target->processes[j];
-                target->processes[j] = temp;
-            }
-        }   
-    }
+    sort_by_arrival_time(target);
 
     // Process Queue
     int current_io_idx = 0;
@@ -108,7 +100,7 @@ GanttChart* nsjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
             current_start_time = i;
             current_burst_time = 0;
 
-            if (target->size == 0 && ready_queue->size == 0) break;
+            if (target->size == 0 && ready_queue->size == 0 && io_queue->size == 0) break;
             if (ready_queue->size > 0) {
                 current = dequeue(ready_queue);
             } else {

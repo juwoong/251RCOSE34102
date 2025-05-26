@@ -13,15 +13,7 @@ GanttChart* fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
     ProcessQueue *io_queue = create_empty_process_queue(target->size);
 
     // Sort by first arrtived
-    for (int i=0; i < target->size - 1; i++) {
-        for (int j=i + 1; j < target->size; j++) {
-            if (target->processes[i].arrival_time > target->processes[j].arrival_time) {
-                Process temp = target->processes[i];
-                target->processes[i] = target->processes[j];
-                target->processes[j] = temp;
-            }
-        }   
-    }
+    sort_by_arrival_time(target);
 
     // Process Queue
     int current_io_idx = 0;
@@ -35,7 +27,7 @@ GanttChart* fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
     }
     Process current = {0, 0, 0, 0, 0};
     GanttChart *gantt_chart = create_gantt_chart(target->size + 20); 
-    
+
     int max_time = 1000;
 
     for(int i=0; i < max_time; i++) {
@@ -109,7 +101,7 @@ GanttChart* fcfs_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
             current_start_time = i;
             current_burst_time = 0;
 
-            if (target->size == 0 && ready_queue->size == 0) break;
+            if (target->size == 0 && ready_queue->size == 0 && io_queue->size == 0) break;
             if (ready_queue->size > 0) {
                 current = dequeue(ready_queue);
             } else {
