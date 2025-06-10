@@ -1,7 +1,6 @@
 #ifndef GANTT_H
 #define GANTT_H
 
-// 간트 차트 항목을 나타내는 구조체
 typedef struct {
     int pid;            // 프로세스 ID
     int start_time;     // 시작 시간

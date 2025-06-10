@@ -40,7 +40,7 @@ void print_gantt_chart(GanttChart *chart) {
         return;
     }
     
-    printf("\Gantt Chart:\n");
+    printf("Gantt Chart:\n");
     printf("PID\t시작\t종료\t작업\n");
     printf("------------------------\n");
 

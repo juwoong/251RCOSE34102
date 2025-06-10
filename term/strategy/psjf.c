@@ -74,8 +74,8 @@ GanttChart* psjf_scheduling(ProcessQueue *queue, int *io_time, int io_time_lengt
                 current_start_time = i;
                 current_burst_time = 0;
 
-                current = dequeue(ready_queue);
                 sort_by_shortest_job_first(ready_queue);
+                current = dequeue(ready_queue);
             } 
 
             is_changed = 0;

@@ -54,20 +54,14 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     
-    // 랜덤한 IO 시간 생성
+    // Generate random IO times.
     int io_count = rand() % 3 + 2;
     int *io_time = (int*)malloc(io_count * sizeof(int));
-    if (io_time == NULL) {
-        printf("Fail to allocate IO time array.\n");
-        free_process_queue(queue);
-        free(processes);
-        return 1;
-    }
 
-    // 랜덤한 시간 간격으로 IO 시간 생성
+    // Check memory allocation for IO times.
     int current_time = 0;
     for (int i = 0; i < io_count; i++) {
-        current_time += rand() % 10 + 5; // 5~14 시간 간격으로 IO 발생
+        current_time += rand() % 10 + 5; 
         io_time[i] = current_time;
     }
 
